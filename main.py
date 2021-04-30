@@ -6,10 +6,11 @@ from flask_cors import CORS
 
 # imports para o firebase
 import firebase_admin
-from firebase_admin import firestore
+from firebase_admin import firestore, credentials
 
 # Aqui iniciamos a API
 from views.heroes import HeroesHandler, HeroHandler
+from views.heroes_search import HeroesSearchHandler
 from views.top_heroes import TopHeroesHandler
 
 app = Flask(__name__)
@@ -17,8 +18,8 @@ CORS(app)
 API = Api(app)
 
 # Iniciando o firebase com as credenciais que você salvou na raiz
-cred = firebase_admin.credentials.Certificate(
-    './projeto-tuor-of-heros-firebase-adminsdk-gk6pb-e2fa181b75.json')
+cred = credentials.Certificate("./projeto-tuor-of-heros-firebase-adminsdk-gk6pb-73ed5118ce.json")
+
 
 firebase_admin.initialize_app(credential=cred)
 FIRESTORE_DB = firestore.client()
@@ -56,6 +57,7 @@ API.add_resource(Index, '/', endpoint='index')
 API.add_resource(HeroesHandler, '/heroes', endpoint='heroes')
 API.add_resource(HeroHandler, '/hero/<hero_id>', endpoint='hero')
 API.add_resource(TopHeroesHandler, '/top-heroes', endpoint='top-heroes')
+API.add_resource(HeroesSearchHandler, '/search', endpoint='search')
 
 if __name__ == '__main__':
     # Isso é utilizado somente para executar a aplicação local. Quando
